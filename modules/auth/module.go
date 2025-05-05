@@ -12,6 +12,16 @@ type Module struct {
 	logger *logger.Logger
 }
 
-func (m *Module) Initialize(db *gorm.DB, log *logger.Logger, event *bus.EventBus) error {
+func (m *Module) Name() string {
+	return "auth"
+}
 
+func (m *Module) Initialize(db *gorm.DB, log *logger.Logger, event *bus.EventBus) error {
+	m.db = db
+	m.logger = log
+	m.event = event
+
+	m.logger.Info("Initializing auth module")
+
+	m.logger.Debug("")
 }
