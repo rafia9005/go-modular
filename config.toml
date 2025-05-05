@@ -10,10 +10,10 @@ api_version = "1"
 [database]
 db_driver = "mysql"
 db_host = "localhost"
-db_port = "3307"
+db_port = "3306"
 db_name = "backend_modules"
-db_username = "user"
-db_password = "password"
+db_username = "root"
+db_password = "ahmadrafi01"
 
 [pool]
 conn_idle = 200
