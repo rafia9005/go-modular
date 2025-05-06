@@ -34,6 +34,7 @@ func (h *AuthHandler) Handle(event bus.Event) {
 	fmt.Printf("User created: %v", event.Payload)
 }
 
+// Register handles user registration
 func (h *AuthHandler) Register(c echo.Context) error {
 	h.log.Info("Handling register request")
 
@@ -69,7 +70,46 @@ func (h *AuthHandler) Register(c echo.Context) error {
 	return c.JSON(http.StatusCreated, response.FromEntity(user))
 }
 
+// Login handles user login
+func (h *AuthHandler) Login(c echo.Context) error {
+	h.log.Info("Handling login request")
+
+	req := new(request.LoginRequest)
+	if err := c.Bind(req); err != nil {
+		h.log.Error("Failed to bind request:", err)
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
+	}
+
+	if err := c.Validate(req); err != nil {
+		h.log.Error("Validation failed:", err)
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
+	}
+
+	h.log.Debug("Request validated successfully:", req)
+
+	user, err := h.authService.ProcessLogin(c.Request().Context(), req.Email, req.Password)
+	if err != nil {
+		if err == service.ErrUserNotFound {
+			h.log.Warn("User not found:", req.Email)
+			return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Invalid email or password"})
+		}
+		if err == service.ErrInvalidPassword {
+			h.log.Warn("Invalid password for email:", req.Email)
+			return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Invalid email or password"})
+		}
+		h.log.Error("Failed to process login:", err)
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
+	}
+
+	h.log.Debug("User authenticated successfully:", user)
+
+	// Return user information or JWT token (if implemented)
+	return c.JSON(http.StatusOK, response.FromEntity(user))
+}
+
+// RegisterRoutes sets up the auth routes
 func (h *AuthHandler) RegisterRoutes(e *echo.Echo, basePath string) {
 	group := e.Group(basePath + "/auth")
 	group.POST("/register", h.Register)
+	group.POST("/login", h.Login)
 }

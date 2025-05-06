@@ -20,7 +20,7 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_HOST: "%"
-      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_ROOT_PASSWORD: root_admin
       MYSQL_DATABASE: backend_modules
       MYSQL_USER: user
       MYSQL_PASSWORD: password

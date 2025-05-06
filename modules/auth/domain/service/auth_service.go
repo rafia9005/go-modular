@@ -5,12 +5,15 @@ import (
 	"errors"
 	"go-modular-boilerplate/modules/users/domain/entity"
 	"go-modular-boilerplate/modules/users/domain/repository"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 // Errors
 var (
 	ErrUserNotFound     = errors.New("user not found")
 	ErrEmailAlreadyUsed = errors.New("email already in use")
+	ErrInvalidPassword  = errors.New("invalid password")
 )
 
 // AuthService handles user authentication
@@ -42,5 +45,38 @@ func (s *AuthService) CreateUser(ctx context.Context, user *entity.User) error {
 		return ErrEmailAlreadyUsed
 	}
 
+	// Hash the password before saving the user
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return err
+	}
+	user.Password = string(hashedPassword)
+
 	return s.userRepo.Create(ctx, user)
+}
+
+// ProcessLogin handles user login and password verification
+func (s *AuthService) ProcessLogin(ctx context.Context, email, password string) (*entity.User, error) {
+	// Validate input
+	if email == "" || password == "" {
+		return nil, errors.New("email and password cannot be empty")
+	}
+
+	// Find user by email
+	existingUser, err := s.userRepo.FindByEmail(ctx, email)
+	if err != nil {
+		if err == repository.ERR_RECORD_NOT_FOUND {
+			return nil, ErrUserNotFound
+		}
+		return nil, err
+	}
+
+	// Compare the provided password with the hashed password in the database
+	err = bcrypt.CompareHashAndPassword([]byte(existingUser.Password), []byte(password))
+	if err != nil {
+		return nil, ErrInvalidPassword
+	}
+
+	// Return the authenticated user
+	return existingUser, nil
 }

@@ -16,7 +16,7 @@ RUN go mod download
 COPY . .
 
 # Step 6: Build the Go app
-RUN go build -o main ./cmd/app/
+RUN go build -o main
 
 # Step 7: Use a minimal base image for running the app
 FROM alpine:latest
@@ -28,7 +28,7 @@ WORKDIR /app
 COPY --from=builder /app/main .
 
 # Step 10: Copy Configuration
-COPY config.toml .
+COPY config-prod.toml .
 
 # Step 11: Command to run the app
-CMD ["./main", "-c", "config.toml"]
+CMD ["./main", "-c", "config-prod.toml"]
