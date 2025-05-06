@@ -2,6 +2,8 @@ package auth
 
 import (
 	"go-modular-boilerplate/internal/pkg/bus"
+	"go-modular-boilerplate/internal/pkg/config"
+	"go-modular-boilerplate/internal/pkg/jwt"
 	"go-modular-boilerplate/internal/pkg/logger"
 	"go-modular-boilerplate/modules/auth/domain/service"
 	"go-modular-boilerplate/modules/auth/handler"
@@ -34,8 +36,11 @@ func (m *Module) Initialize(db *gorm.DB, log *logger.Logger, event *bus.EventBus
 	// Initialize services
 	m.authService = service.NewAuthService(userRepo)
 
+	// Initialize JWT
+	jwtService := jwt.NewJWTImpl(config.GetString("jwt.signature_key"), 7)
+
 	// Initialize handlers
-	m.authHandler = handler.NewAuthHandler(m.logger, m.event, m.authService)
+	m.authHandler = handler.NewAuthHandler(m.logger, m.event, m.authService, jwtService)
 
 	m.logger.Info("Auth module initialized successfully")
 	return nil

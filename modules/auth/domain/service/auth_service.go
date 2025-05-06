@@ -3,10 +3,9 @@ package service
 import (
 	"context"
 	"errors"
+	"go-modular-boilerplate/internal/pkg/utils"
 	"go-modular-boilerplate/modules/users/domain/entity"
 	"go-modular-boilerplate/modules/users/domain/repository"
-
-	"golang.org/x/crypto/bcrypt"
 )
 
 // Errors
@@ -46,11 +45,11 @@ func (s *AuthService) CreateUser(ctx context.Context, user *entity.User) error {
 	}
 
 	// Hash the password before saving the user
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+	hashedPassword, err := utils.HashPassword(user.Password)
 	if err != nil {
 		return err
 	}
-	user.Password = string(hashedPassword)
+	user.Password = hashedPassword
 
 	return s.userRepo.Create(ctx, user)
 }
@@ -72,8 +71,7 @@ func (s *AuthService) ProcessLogin(ctx context.Context, email, password string) 
 	}
 
 	// Compare the provided password with the hashed password in the database
-	err = bcrypt.CompareHashAndPassword([]byte(existingUser.Password), []byte(password))
-	if err != nil {
+	if !utils.CompareHashAndPassword(existingUser.Password, password) {
 		return nil, ErrInvalidPassword
 	}
 

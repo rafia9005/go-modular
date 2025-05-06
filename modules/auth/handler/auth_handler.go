@@ -3,6 +3,7 @@ package handler
 import (
 	"fmt"
 	"go-modular-boilerplate/internal/pkg/bus"
+	"go-modular-boilerplate/internal/pkg/jwt"
 	"go-modular-boilerplate/internal/pkg/logger"
 	"go-modular-boilerplate/modules/auth/domain/service"
 	"go-modular-boilerplate/modules/users/domain/entity"
@@ -18,14 +19,16 @@ type AuthHandler struct {
 	authService *service.AuthService
 	log         *logger.Logger
 	event       *bus.EventBus
+	jwt         jwt.JWT
 }
 
 // creates a new auth handler
-func NewAuthHandler(log *logger.Logger, event *bus.EventBus, authService *service.AuthService) *AuthHandler {
+func NewAuthHandler(log *logger.Logger, event *bus.EventBus, authService *service.AuthService, jwt jwt.JWT) *AuthHandler {
 	return &AuthHandler{
 		authService: authService,
 		log:         log,
 		event:       event,
+		jwt:         jwt,
 	}
 }
 
@@ -104,7 +107,24 @@ func (h *AuthHandler) Login(c echo.Context) error {
 	h.log.Debug("User authenticated successfully:", user)
 
 	// Return user information or JWT token (if implemented)
-	return c.JSON(http.StatusOK, response.FromEntity(user))
+	tokenData := map[string]interface{}{
+		"user_id": user.ID,
+		"email":   user.Email,
+		"name":    user.Name,
+	}
+
+	token, err := h.jwt.GenerateToken(tokenData)
+
+	if err != nil {
+		h.log.Error("Failed to generate token:", err)
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
+	}
+
+	return c.JSON(http.StatusOK, map[string]interface{}{
+		"token":   token,
+		"user":    response.FromEntity(user),
+		"message": "Login successful",
+	})
 }
 
 // RegisterRoutes sets up the auth routes
