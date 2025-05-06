@@ -52,7 +52,7 @@ func (s *UserService) CreateUser(ctx context.Context, user *entity.User) error {
 	// 	return ErrEmailAlreadyUsed
 	// }
 
-	return s.userRepo.Create(ctx, user)
+	return s.userRepo.Create(ctx, user) //
 }
 
 // UpdateUser updates a user

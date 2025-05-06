@@ -5,6 +5,7 @@ import (
 	"go-modular-boilerplate/internal/app"
 	"go-modular-boilerplate/internal/pkg/config"
 	"go-modular-boilerplate/internal/pkg/logger"
+	"go-modular-boilerplate/modules/auth"
 	user "go-modular-boilerplate/modules/users"
 	"log"
 	"os"
@@ -38,6 +39,7 @@ func main() {
 
 	// register modules
 	app.RegisterModule(user.NewModule())
+	app.RegisterModule(auth.NewModule())
 
 	// initialize the application
 	if err := app.Initialize(); err != nil {
