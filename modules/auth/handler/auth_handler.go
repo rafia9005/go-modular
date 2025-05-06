@@ -70,7 +70,11 @@ func (h *AuthHandler) Register(c echo.Context) error {
 	h.event.Publish(bus.Event{Type: "user.created", Payload: user})
 	h.log.Debug("Event 'user.created' published successfully")
 
-	return c.JSON(http.StatusCreated, response.FromEntity(user))
+	return c.JSON(http.StatusCreated, map[string]interface{}{
+		"data": map[string]interface{}{
+			"user": response.FromEntity(user),
+		},
+	})
 }
 
 // Login handles user login
@@ -121,9 +125,11 @@ func (h *AuthHandler) Login(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, map[string]interface{}{
-		"token":   token,
-		"user":    response.FromEntity(user),
-		"message": "Login successful",
+		"data": map[string]interface{}{
+			"token":   token,
+			"user":    response.FromEntity(user),
+			"message": "Login successful",
+		},
 	})
 }
 
