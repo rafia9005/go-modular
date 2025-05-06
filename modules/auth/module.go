@@ -4,6 +4,7 @@ import (
 	"go-modular-boilerplate/internal/pkg/bus"
 	"go-modular-boilerplate/internal/pkg/logger"
 
+	"github.com/labstack/echo"
 	"gorm.io/gorm"
 )
 
@@ -24,4 +25,9 @@ func (m *Module) Initialize(db *gorm.DB, log *logger.Logger, event *bus.EventBus
 	m.logger.Info("Initializing auth module")
 
 	m.logger.Debug("")
+}
+
+func (m *Module) RegisterRoutes(e *echo.Echo, basePath string) {
+	m.logger.Info("Registering user routes at %s/auth", basePath)
+	
 }
