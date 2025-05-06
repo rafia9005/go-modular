@@ -73,6 +73,28 @@ func (h *UserHandler) GetUser(c echo.Context) error {
 func (h *UserHandler) CreateUser(c echo.Context) error {
 	ctx := c.Request().Context()
 
+	req := new(request.CreateUserRequest)
+	if err := c.Bind(req); err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
+	}
+
+	if err := c.Validate(req); err != nil {
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
+	}
+
+	user := entity.NewUser(req.Name, req.Email, req.Password)
+	err := h.userService.CreateUser(ctx, user)
+	if err != nil {
+		if err == service.ErrEmailAlreadyUsed {
+			return c.JSON(http.StatusConflict, map[string]string{"error": "Email already in use"})
+		}
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
+	}
+
+	// event bus publish
+	h.event.Publish(bus.Event{Type: "user.created", Payload: user})
+
+	return c.JSON(http.StatusCreated, response.FromEntity(user))
 }
 
 // UpdateUser updates a user
