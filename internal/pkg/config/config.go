@@ -1,6 +1,7 @@
 package config
 
 import (
+	"go-modular-boilerplate/internal/pkg/jwt"
 	"log"
 	"os"
 	"path/filepath"
@@ -60,4 +61,12 @@ func GetInt(key string) int {
 func GetBool(key string) bool {
 	checkKey(key)
 	return viper.GetBool(key)
+}
+
+func GetJWTService() jwt.JWT {
+	signatureKey := GetString("jwt.signature_key")
+	if signatureKey == "" {
+		panic("JWT signature key not found in configuration")
+	}
+	return jwt.NewJWTImpl(signatureKey, 7)
 }

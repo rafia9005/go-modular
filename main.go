@@ -5,6 +5,7 @@ import (
 	"go-modular-boilerplate/internal/app"
 	"go-modular-boilerplate/internal/pkg/config"
 	"go-modular-boilerplate/internal/pkg/logger"
+	"go-modular-boilerplate/internal/pkg/middleware"
 	"go-modular-boilerplate/modules/auth"
 	user "go-modular-boilerplate/modules/users"
 	"log"
@@ -36,6 +37,10 @@ func main() {
 		log.Fatalf("Error creating application : %v", err)
 		os.Exit(1)
 	}
+
+	// Initialize Auth middleware
+	jwtSignatureKey := config.GetJWTService()
+	middleware.InitializeAuth(jwtSignatureKey)
 
 	// register modules
 	app.RegisterModule(user.NewModule())
