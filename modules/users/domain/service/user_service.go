@@ -3,8 +3,8 @@ package service
 import (
 	"context"
 	"errors"
-	"go-modular-boilerplate/modules/users/domain/entity"
-	"go-modular-boilerplate/modules/users/domain/repository"
+	"go-modular/modules/users/domain/entity"
+	"go-modular/modules/users/domain/repository"
 )
 
 // Errors

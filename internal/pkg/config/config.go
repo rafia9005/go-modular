@@ -1,7 +1,7 @@
 package config
 
 import (
-	"go-modular-boilerplate/internal/pkg/jwt"
+	"go-modular/internal/pkg/jwt"
 	"log"
 	"os"
 	"path/filepath"

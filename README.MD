@@ -35,8 +35,8 @@ The easiest way to run the application is using Docker Compose:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/zakirkun/go-modular-boilerplate.git
-   cd go-modular-boilerplate
+   git clone https://github.com/zakirkun/go-modular.git
+   cd go-modular
    ```
 
 2. Make the helper scripts executable:
@@ -60,8 +60,8 @@ The easiest way to run the application is using Docker Compose:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/zakirkun/go-modular-boilerplate.git
-   cd go-modular-boilerplate
+   git clone https://github.com/zakirkun/go-modular.git
+   cd go-modular
    ```
 
 2. Install dependencies:
@@ -111,7 +111,7 @@ package mymodule
 
 import (
 	"github.com/labstack/echo/v4"
-	"go-modular-boilerplate/your-project/pkg/logger"
+	"go-modular/your-project/pkg/logger"
 	"gorm.io/gorm"
 )
 

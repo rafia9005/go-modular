@@ -3,8 +3,8 @@ package repository
 import (
 	"context"
 	"errors"
-	"go-modular-boilerplate/internal/pkg/database"
-	"go-modular-boilerplate/modules/users/domain/entity"
+	"go-modular/internal/pkg/database"
+	"go-modular/modules/users/domain/entity"
 )
 
 var (

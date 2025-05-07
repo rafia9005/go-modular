@@ -4,13 +4,13 @@ package handler
 
 import (
 	"fmt"
-	"go-modular-boilerplate/internal/pkg/bus"
-	"go-modular-boilerplate/internal/pkg/logger"
-	"go-modular-boilerplate/internal/pkg/middleware"
-	"go-modular-boilerplate/modules/users/domain/entity"
-	"go-modular-boilerplate/modules/users/domain/service"
-	"go-modular-boilerplate/modules/users/dto/request"
-	"go-modular-boilerplate/modules/users/dto/response"
+	"go-modular/internal/pkg/bus"
+	"go-modular/internal/pkg/logger"
+	"go-modular/internal/pkg/middleware"
+	"go-modular/modules/users/domain/entity"
+	"go-modular/modules/users/domain/service"
+	"go-modular/modules/users/dto/request"
+	"go-modular/modules/users/dto/response"
 	"net/http"
 	"strconv"
 

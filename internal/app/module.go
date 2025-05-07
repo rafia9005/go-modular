@@ -1,8 +1,8 @@
 package app
 
 import (
-	"go-modular-boilerplate/internal/pkg/bus"
-	"go-modular-boilerplate/internal/pkg/logger"
+	"go-modular/internal/pkg/bus"
+	"go-modular/internal/pkg/logger"
 
 	"github.com/labstack/echo"
 	"gorm.io/gorm"

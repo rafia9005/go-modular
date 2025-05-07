@@ -2,12 +2,12 @@ package main
 
 import (
 	"flag"
-	"go-modular-boilerplate/internal/app"
-	"go-modular-boilerplate/internal/pkg/config"
-	"go-modular-boilerplate/internal/pkg/logger"
-	"go-modular-boilerplate/internal/pkg/middleware"
-	"go-modular-boilerplate/modules/auth"
-	user "go-modular-boilerplate/modules/users"
+	"go-modular/internal/app"
+	"go-modular/internal/pkg/config"
+	"go-modular/internal/pkg/logger"
+	"go-modular/internal/pkg/middleware"
+	"go-modular/modules/auth"
+	user "go-modular/modules/users"
 	"log"
 	"os"
 )

@@ -1,12 +1,12 @@
 package auth
 
 import (
-	"go-modular-boilerplate/internal/pkg/bus"
-	"go-modular-boilerplate/internal/pkg/config"
-	"go-modular-boilerplate/internal/pkg/logger"
-	"go-modular-boilerplate/modules/auth/domain/service"
-	"go-modular-boilerplate/modules/auth/handler"
-	"go-modular-boilerplate/modules/users/domain/repository"
+	"go-modular/internal/pkg/bus"
+	"go-modular/internal/pkg/config"
+	"go-modular/internal/pkg/logger"
+	"go-modular/modules/auth/domain/service"
+	"go-modular/modules/auth/handler"
+	"go-modular/modules/users/domain/repository"
 
 	"github.com/labstack/echo"
 	"gorm.io/gorm"

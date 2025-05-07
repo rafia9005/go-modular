@@ -3,9 +3,9 @@ package service
 import (
 	"context"
 	"errors"
-	"go-modular-boilerplate/internal/pkg/utils"
-	"go-modular-boilerplate/modules/users/domain/entity"
-	"go-modular-boilerplate/modules/users/domain/repository"
+	"go-modular/internal/pkg/utils"
+	"go-modular/modules/users/domain/entity"
+	"go-modular/modules/users/domain/repository"
 )
 
 // Errors

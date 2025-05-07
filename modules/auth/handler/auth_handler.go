@@ -2,13 +2,13 @@ package handler
 
 import (
 	"fmt"
-	"go-modular-boilerplate/internal/pkg/bus"
-	"go-modular-boilerplate/internal/pkg/jwt"
-	"go-modular-boilerplate/internal/pkg/logger"
-	"go-modular-boilerplate/modules/auth/domain/service"
-	"go-modular-boilerplate/modules/users/domain/entity"
-	"go-modular-boilerplate/modules/users/dto/request"
-	"go-modular-boilerplate/modules/users/dto/response"
+	"go-modular/internal/pkg/bus"
+	"go-modular/internal/pkg/jwt"
+	"go-modular/internal/pkg/logger"
+	"go-modular/modules/auth/domain/service"
+	"go-modular/modules/users/domain/entity"
+	"go-modular/modules/users/dto/request"
+	"go-modular/modules/users/dto/response"
 	"net/http"
 
 	"github.com/labstack/echo"

@@ -2,12 +2,12 @@ package app
 
 import (
 	"fmt"
-	"go-modular-boilerplate/internal/pkg/bus"
-	"go-modular-boilerplate/internal/pkg/config"
-	"go-modular-boilerplate/internal/pkg/database"
-	"go-modular-boilerplate/internal/pkg/logger"
-	"go-modular-boilerplate/internal/pkg/server"
-	_validator "go-modular-boilerplate/internal/pkg/validator"
+	"go-modular/internal/pkg/bus"
+	"go-modular/internal/pkg/config"
+	"go-modular/internal/pkg/database"
+	"go-modular/internal/pkg/logger"
+	"go-modular/internal/pkg/server"
+	_validator "go-modular/internal/pkg/validator"
 	"time"
 
 	"github.com/labstack/echo"

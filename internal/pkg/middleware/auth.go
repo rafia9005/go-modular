@@ -2,7 +2,7 @@ package middleware
 
 import (
 	"fmt"
-	"go-modular-boilerplate/internal/pkg/jwt"
+	"go-modular/internal/pkg/jwt"
 	"net/http"
 	"strings"
 

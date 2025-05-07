@@ -3,7 +3,7 @@
 package response
 
 import (
-	"go-modular-boilerplate/modules/users/domain/entity"
+	"go-modular/modules/users/domain/entity"
 	"time"
 )
 

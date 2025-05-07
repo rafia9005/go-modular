@@ -1,4 +1,4 @@
-module go-modular-boilerplate
+module go-modular
 
 go 1.23.1
 

@@ -1,12 +1,12 @@
 package user
 
 import (
-	"go-modular-boilerplate/internal/pkg/bus"
-	"go-modular-boilerplate/internal/pkg/logger"
-	"go-modular-boilerplate/modules/users/domain/entity"
-	"go-modular-boilerplate/modules/users/domain/repository"
-	"go-modular-boilerplate/modules/users/domain/service"
-	"go-modular-boilerplate/modules/users/handler"
+	"go-modular/internal/pkg/bus"
+	"go-modular/internal/pkg/logger"
+	"go-modular/modules/users/domain/entity"
+	"go-modular/modules/users/domain/repository"
+	"go-modular/modules/users/domain/service"
+	"go-modular/modules/users/handler"
 
 	"github.com/labstack/echo"
 	"gorm.io/gorm"
