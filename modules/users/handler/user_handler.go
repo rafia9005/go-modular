@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"go-modular-boilerplate/internal/pkg/bus"
 	"go-modular-boilerplate/internal/pkg/logger"
+	"go-modular-boilerplate/internal/pkg/middleware"
 	"go-modular-boilerplate/modules/users/domain/entity"
 	"go-modular-boilerplate/modules/users/domain/service"
 	"go-modular-boilerplate/modules/users/dto/request"
@@ -159,7 +160,7 @@ func (h *UserHandler) DeleteUser(c echo.Context) error {
 
 // RegisterRoutes registers the user routes
 func (h *UserHandler) RegisterRoutes(e *echo.Echo, basePath string) {
-	group := e.Group(basePath + "/users")
+	group := e.Group(basePath+"/users", middleware.Auth)
 
 	group.GET("", h.GetAllUsers)
 	group.GET("/:id", h.GetUser)
