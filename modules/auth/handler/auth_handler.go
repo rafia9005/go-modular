@@ -125,25 +125,9 @@ func (h *AuthHandler) Login(c echo.Context) error {
 	}, "Login successful")
 }
 
-// Logout handles user logout.
-func (h *AuthHandler) Logout(c echo.Context) error {
-	h.log.Info("Handling logout request")
-
-	token := c.Request().Header.Get("Authorization")
-	if token == "" {
-		h.log.Warn("Authorization header is missing")
-		return h.r.ErrorResponse(c, http.StatusBadRequest, "Authorization header is missing")
-	}
-
-	// Simulate token invalidation (if blacklist or similar mechanism exists).
-	h.log.Info("Token invalidated successfully")
-	return h.r.SuccessResponse(c, nil, "Logout successful")
-}
-
 // RegisterRoutes sets up the auth routes.
 func (h *AuthHandler) RegisterRoutes(e *echo.Echo, basePath string) {
 	group := e.Group(basePath + "/auth")
 	group.POST("/register", h.Register)
 	group.POST("/login", h.Login)
-	group.GET("/logout", h.Logout)
 }

@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"errors"
+	"go-modular/internal/pkg/jwt"
 	"go-modular/internal/pkg/utils"
 	"go-modular/modules/users/domain/entity"
 	"go-modular/modules/users/domain/repository"
@@ -18,6 +19,7 @@ var (
 // AuthService handles user authentication
 type AuthService struct {
 	userRepo repository.UserRepository
+	jwt      jwt.JWT
 }
 
 // NewAuthService creates a new AuthService
