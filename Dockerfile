@@ -1,6 +1,6 @@
 # Step 1: Use the official Golang image to build the app
 # This uses a specific Go version for stability
-FROM golang:1.20-alpine as builder
+FROM golang:1.23-alpine as builder
 
 # Step 2: Set the working directory inside the container
 WORKDIR /app
@@ -13,7 +13,7 @@ COPY go.mod go.sum ./
 
 # Step 5: Download all Go module dependencies
 # Dependencies will be cached if the go.mod and go.sum files haven't changed
-RUN go mod download
+RUN go mod tidy
 
 # Step 6: Copy the rest of the application code to the container
 COPY . .

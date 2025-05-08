@@ -34,13 +34,14 @@ services:
     networks:
       - infrastructure
     healthcheck:
-      test: ["CMD-SHELL", "mysqladmin ping -h localhost -uroot -proot_admin || exit 1"]
+      test: [ "CMD-SHELL", "mysqladmin ping -h localhost -uroot -proot_admin || exit 1" ]
       interval: 10s
       timeout: 5s
       retries: 3
 
 volumes:
   mysql_data:
+
 
 networks:
   infrastructure:
