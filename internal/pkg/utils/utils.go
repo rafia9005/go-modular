@@ -16,6 +16,6 @@ func CompareHashAndPassword(hashedPassword, password string) bool {
 	return err == nil
 }
 
-func RJson(){
+func RJson() {
 
 }

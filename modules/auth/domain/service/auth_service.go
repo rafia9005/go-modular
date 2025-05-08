@@ -79,10 +79,27 @@ func (s *AuthService) ProcessLogin(ctx context.Context, email, password string) 
 	return existingUser, nil
 }
 
-func (s *AuthService) ChangePassword(ctx context.Context, password string) (*entity.User, error) {
+func (s *AuthService) ChangePassword(ctx context.Context, userID uint, password string) (*entity.User, error) {
 	if password == "" {
-		return nil, errors.New("password is cannot be empty")
+		return nil, errors.New("password cannot be empty")
 	}
 
-	return nil
+	hashedPassword, err := utils.HashPassword(password)
+	if err != nil {
+		return nil, errors.New("failed to hash password")
+	}
+
+	user, err := s.userRepo.FindByID(ctx, userID)
+	if err != nil {
+		return nil, errors.New("user not found")
+	}
+
+	user.Password = hashedPassword
+
+	err = s.userRepo.Update(ctx, user)
+	if err != nil {
+		return nil, errors.New("failed to update password")
+	}
+
+	return user, nil
 }
