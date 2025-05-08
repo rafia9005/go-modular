@@ -78,3 +78,11 @@ func (s *AuthService) ProcessLogin(ctx context.Context, email, password string) 
 	// Return the authenticated user
 	return existingUser, nil
 }
+
+func (s *AuthService) ChangePassword(ctx context.Context, password string) (*entity.User, error) {
+	if password == "" {
+		return nil, errors.New("password is cannot be empty")
+	}
+
+	return nil
+}

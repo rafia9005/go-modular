@@ -133,6 +133,25 @@ func (h *AuthHandler) Login(c echo.Context) error {
 	})
 }
 
+func (h *AuthHandler) ChangePassword(c echo.Context) error {
+	h.log.Info("Handling change password request")
+
+	req := new(request.ChnagePasswordRequest)
+	if err := c.Bind(req); err != nil {
+		h.log.Error("Failed to bind request:", err)
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
+	}
+
+	if err := c.Validate(req); err != nil {
+		h.log.Error("Validation failed:", err)
+		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
+	}
+
+	h.log.Debug("Request validated successfully:", req)
+
+	return nil
+}
+
 // RegisterRoutes sets up the auth routes
 func (h *AuthHandler) RegisterRoutes(e *echo.Echo, basePath string) {
 	group := e.Group(basePath + "/auth")
