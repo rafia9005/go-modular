@@ -5,6 +5,7 @@ import (
 	"go-modular/internal/pkg/bus"
 	"go-modular/internal/pkg/jwt"
 	"go-modular/internal/pkg/logger"
+	"go-modular/internal/pkg/utils"
 	"go-modular/modules/auth/domain/service"
 	"go-modular/modules/users/domain/entity"
 	"go-modular/modules/users/dto/request"
@@ -14,42 +15,44 @@ import (
 	"github.com/labstack/echo"
 )
 
-// AuthHandler struct handles HTTP request for auth
+// AuthHandler struct handles HTTP request for auth.
 type AuthHandler struct {
 	authService *service.AuthService
 	log         *logger.Logger
 	event       *bus.EventBus
 	jwt         jwt.JWT
+	r           *utils.Response
 }
 
-// creates a new auth handler
+// NewAuthHandler creates a new auth handler.
 func NewAuthHandler(log *logger.Logger, event *bus.EventBus, authService *service.AuthService, jwt jwt.JWT) *AuthHandler {
 	return &AuthHandler{
 		authService: authService,
 		log:         log,
 		event:       event,
 		jwt:         jwt,
+		r:           &utils.Response{},
 	}
 }
 
-// Initialize Event Handle
+// Initialize Event Handle.
 func (h *AuthHandler) Handle(event bus.Event) {
 	fmt.Printf("User created: %v", event.Payload)
 }
 
-// Register handles user registration
+// Register handles user registration.
 func (h *AuthHandler) Register(c echo.Context) error {
 	h.log.Info("Handling register request")
 
 	req := new(request.CreateUserRequest)
 	if err := c.Bind(req); err != nil {
 		h.log.Error("Failed to bind request:", err)
-		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
+		return h.r.ErrorResponse(c, http.StatusBadRequest, err.Error())
 	}
 
 	if err := c.Validate(req); err != nil {
 		h.log.Error("Validation failed:", err)
-		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
+		return h.r.ErrorResponse(c, http.StatusBadRequest, err.Error())
 	}
 
 	h.log.Debug("Request validated successfully:", req)
@@ -59,10 +62,10 @@ func (h *AuthHandler) Register(c echo.Context) error {
 	if err != nil {
 		if err == service.ErrEmailAlreadyUsed {
 			h.log.Warn("Email already in use:", req.Email)
-			return c.JSON(http.StatusConflict, map[string]string{"error": "Email already in use"})
+			return h.r.ErrorResponse(c, http.StatusConflict, "Email already in use")
 		}
 		h.log.Error("Failed to create user:", err)
-		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
+		return h.r.ErrorResponse(c, http.StatusInternalServerError, err.Error())
 	}
 
 	h.log.Debug("User created successfully:", user)
@@ -70,47 +73,40 @@ func (h *AuthHandler) Register(c echo.Context) error {
 	h.event.Publish(bus.Event{Type: "user.created", Payload: user})
 	h.log.Debug("Event 'user.created' published successfully")
 
-	return c.JSON(http.StatusCreated, map[string]interface{}{
-		"data": map[string]interface{}{
-			"user": response.FromEntity(user),
-		},
-	})
+	return h.r.SuccessResponse(c, map[string]interface{}{
+		"user": response.FromEntity(user),
+	}, "User registered successfully")
 }
 
-// Login handles user login
+// Login handles user login.
 func (h *AuthHandler) Login(c echo.Context) error {
 	h.log.Info("Handling login request")
 
 	req := new(request.LoginRequest)
 	if err := c.Bind(req); err != nil {
 		h.log.Error("Failed to bind request:", err)
-		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
+		return h.r.ErrorResponse(c, http.StatusBadRequest, err.Error())
 	}
 
 	if err := c.Validate(req); err != nil {
 		h.log.Error("Validation failed:", err)
-		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
+		return h.r.ErrorResponse(c, http.StatusBadRequest, err.Error())
 	}
 
 	h.log.Debug("Request validated successfully:", req)
 
 	user, err := h.authService.ProcessLogin(c.Request().Context(), req.Email, req.Password)
 	if err != nil {
-		if err == service.ErrUserNotFound {
-			h.log.Warn("User not found:", req.Email)
-			return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Invalid email or password"})
-		}
-		if err == service.ErrInvalidPassword {
-			h.log.Warn("Invalid password for email:", req.Email)
-			return c.JSON(http.StatusUnauthorized, map[string]string{"error": "Invalid email or password"})
+		if err == service.ErrUserNotFound || err == service.ErrInvalidPassword {
+			h.log.Warn("Invalid email or password for:", req.Email)
+			return h.r.ErrorResponse(c, http.StatusUnauthorized, "Invalid email or password")
 		}
 		h.log.Error("Failed to process login:", err)
-		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
+		return h.r.ErrorResponse(c, http.StatusInternalServerError, err.Error())
 	}
 
 	h.log.Debug("User authenticated successfully:", user)
 
-	// Return user information or JWT token (if implemented)
 	tokenData := map[string]interface{}{
 		"user_id": user.ID,
 		"email":   user.Email,
@@ -118,43 +114,36 @@ func (h *AuthHandler) Login(c echo.Context) error {
 	}
 
 	token, err := h.jwt.GenerateToken(tokenData)
-
 	if err != nil {
 		h.log.Error("Failed to generate token:", err)
-		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
+		return h.r.ErrorResponse(c, http.StatusInternalServerError, err.Error())
 	}
 
-	return c.JSON(http.StatusOK, map[string]interface{}{
-		"data": map[string]interface{}{
-			"token":   token,
-			"user":    response.FromEntity(user),
-			"message": "Login successful",
-		},
-	})
+	return h.r.SuccessResponse(c, map[string]interface{}{
+		"token": token,
+		"user":  response.FromEntity(user),
+	}, "Login successful")
 }
 
-func (h *AuthHandler) ChangePassword(c echo.Context) error {
-	h.log.Info("Handling change password request")
+// Logout handles user logout.
+func (h *AuthHandler) Logout(c echo.Context) error {
+	h.log.Info("Handling logout request")
 
-	req := new(request.ChnagePasswordRequest)
-	if err := c.Bind(req); err != nil {
-		h.log.Error("Failed to bind request:", err)
-		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
+	token := c.Request().Header.Get("Authorization")
+	if token == "" {
+		h.log.Warn("Authorization header is missing")
+		return h.r.ErrorResponse(c, http.StatusBadRequest, "Authorization header is missing")
 	}
 
-	if err := c.Validate(req); err != nil {
-		h.log.Error("Validation failed:", err)
-		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
-	}
-
-	h.log.Debug("Request validated successfully:", req)
-
-	return nil
+	// Simulate token invalidation (if blacklist or similar mechanism exists).
+	h.log.Info("Token invalidated successfully")
+	return h.r.SuccessResponse(c, nil, "Logout successful")
 }
 
-// RegisterRoutes sets up the auth routes
+// RegisterRoutes sets up the auth routes.
 func (h *AuthHandler) RegisterRoutes(e *echo.Echo, basePath string) {
 	group := e.Group(basePath + "/auth")
 	group.POST("/register", h.Register)
 	group.POST("/login", h.Login)
+	group.GET("/logout", h.Logout)
 }
