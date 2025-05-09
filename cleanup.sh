@@ -17,7 +17,7 @@ read -r remove_images
 
 if [[ "$remove_images" =~ ^[Yy]$ ]]; then
     echo "Removing images..."
-    docker rmi $(docker images -q backend_modules:latest mysql:8.0) 2>/dev/null || true
+    docker rmi $(docker image -q backend_modules:latest mysql:8.0) 2>/dev/null || true
     echo "Images removed."
 fi
 
