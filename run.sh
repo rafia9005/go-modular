@@ -1,12 +1,10 @@
 #!/bin/bash
 
-# Make sure the script exits on any error
 set -e
 
 echo "Starting the application with Docker Compose..."
 
-# Build and start the containers
-docker compose up --build -d
+docker compose up --build
 
 echo "Application is running!"
 echo "API is available at http://localhost:8080"
