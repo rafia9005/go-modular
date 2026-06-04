@@ -4,17 +4,17 @@ package handler
 
 import (
 	"fmt"
-	"go-modular/internal/pkg/bus"
-	"go-modular/internal/pkg/logger"
-	"go-modular/internal/pkg/middleware"
-	"go-modular/modules/users/domain/entity"
-	"go-modular/modules/users/domain/service"
-	"go-modular/modules/users/dto/request"
-	"go-modular/modules/users/dto/response"
+	"ping-uptime/internal/pkg/bus"
+	"ping-uptime/internal/pkg/logger"
+	"ping-uptime/internal/pkg/middleware"
+	"ping-uptime/modules/users/domain/entity"
+	"ping-uptime/modules/users/domain/service"
+	"ping-uptime/modules/users/dto/request"
+	"ping-uptime/modules/users/dto/response"
 	"net/http"
 	"strconv"
 
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
 // UserHandler handles HTTP requests for users

@@ -3,8 +3,8 @@ package repository
 import (
 	"context"
 	"errors"
-	"go-modular/internal/pkg/database"
-	"go-modular/modules/users/domain/entity"
+	"ping-uptime/internal/pkg/database"
+	"ping-uptime/modules/users/domain/entity"
 )
 
 var (

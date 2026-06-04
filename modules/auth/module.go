@@ -1,14 +1,14 @@
 package auth
 
 import (
-	"go-modular/internal/pkg/bus"
-	"go-modular/internal/pkg/config"
-	"go-modular/internal/pkg/logger"
-	"go-modular/modules/auth/domain/service"
-	"go-modular/modules/auth/handler"
-	"go-modular/modules/users/domain/repository"
+	"ping-uptime/internal/pkg/bus"
+	"ping-uptime/internal/pkg/config"
+	"ping-uptime/internal/pkg/logger"
+	"ping-uptime/modules/auth/domain/service"
+	"ping-uptime/modules/auth/handler"
+	"ping-uptime/modules/users/domain/repository"
 
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 )
 

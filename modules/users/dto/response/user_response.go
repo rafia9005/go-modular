@@ -3,7 +3,7 @@
 package response
 
 import (
-	"go-modular/modules/users/domain/entity"
+	"ping-uptime/modules/users/domain/entity"
 	"time"
 )
 

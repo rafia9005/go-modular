@@ -2,16 +2,16 @@ package app
 
 import (
 	"fmt"
-	"go-modular/internal/pkg/bus"
-	"go-modular/internal/pkg/config"
-	"go-modular/internal/pkg/database"
-	"go-modular/internal/pkg/logger"
-	"go-modular/internal/pkg/server"
-	_validator "go-modular/internal/pkg/validator"
+	"ping-uptime/internal/pkg/bus"
+	"ping-uptime/internal/pkg/config"
+	"ping-uptime/internal/pkg/database"
+	"ping-uptime/internal/pkg/logger"
+	"ping-uptime/internal/pkg/server"
+	_validator "ping-uptime/internal/pkg/validator"
 	"time"
 
-	"github.com/labstack/echo"
-	"github.com/labstack/echo/middleware"
+	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	"gorm.io/gorm"
 )
 
@@ -26,7 +26,7 @@ type App struct {
 
 // NewApp creates a new application
 func NewApp(cfg *logger.Config) (*App, error) {
-	appLogger, err := logger.NewLogger(*cfg, config.GetString("server.app_name"))
+	appLogger, err := logger.NewLogger(*cfg, config.GetString("APP_NAME"))
 	if err != nil {
 		return nil, err
 	}
@@ -101,7 +101,7 @@ func (a *App) Initialize() error {
 	a.server = a.SetServer()
 
 	// api version
-	version := fmt.Sprintf("/api/v%s", config.GetString("server.api_version"))
+	version := fmt.Sprintf("/api/v%s", config.GetString("API_VERSION"))
 
 	// Register routes for all modules
 	for _, module := range a.modules {
@@ -131,24 +131,24 @@ func (a *App) Start() {
 // setup database model
 func (a *App) SetDatabase() *database.DBModel {
 	return &database.DBModel{
-		ServerMode:   config.GetString("server.mode"),
-		Driver:       config.GetString("database.db_driver"),
-		Host:         config.GetString("database.db_host"),
-		Port:         config.GetString("database.db_port"),
-		Name:         config.GetString("database.db_name"),
-		Username:     config.GetString("database.db_username"),
-		Password:     config.GetString("database.db_password"),
-		MaxIdleConn:  config.GetInt("pool.conn_idle"),
-		MaxOpenConn:  config.GetInt("pool.conn_max"),
-		ConnLifeTime: config.GetInt("pool.conn_lifetime"),
+		ServerMode:   config.GetString("SERVER_MODE"),
+		Driver:       config.GetString("DB_DRIVER"),
+		Host:         config.GetString("DB_HOST"),
+		Port:         config.GetString("DB_PORT"),
+		Name:         config.GetString("DB_NAME"),
+		Username:     config.GetString("DB_USERNAME"),
+		Password:     config.GetString("DB_PASSWORD"),
+		MaxIdleConn:  config.GetInt("POOL_CONN_IDLE"),
+		MaxOpenConn:  config.GetInt("POOL_CONN_MAX"),
+		ConnLifeTime: config.GetInt("POOL_CONN_LIFETIME"),
 	}
 }
 
 // Setup Web Server
 func (a *App) SetServer() *server.ServerContext {
 	return &server.ServerContext{
-		Host:         ":" + config.GetString("server.port"),
-		ReadTimeout:  time.Duration(config.GetInt("server.http_timeout")),
-		WriteTimeout: time.Duration(config.GetInt("server.http_timeout")),
+		Host:         ":" + config.GetString("PORT"),
+		ReadTimeout:  time.Duration(config.GetInt("HTTP_TIMEOUT")),
+		WriteTimeout: time.Duration(config.GetInt("HTTP_TIMEOUT")),
 	}
 }

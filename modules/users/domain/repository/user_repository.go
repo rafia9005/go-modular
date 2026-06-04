@@ -2,7 +2,7 @@ package repository
 
 import (
 	"context"
-	"go-modular/modules/users/domain/entity"
+	"ping-uptime/modules/users/domain/entity"
 )
 
 // UserRepository defines the user repository interface

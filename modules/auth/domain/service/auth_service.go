@@ -3,10 +3,10 @@ package service
 import (
 	"context"
 	"errors"
-	"go-modular/internal/pkg/jwt"
-	"go-modular/internal/pkg/utils"
-	"go-modular/modules/users/domain/entity"
-	"go-modular/modules/users/domain/repository"
+	"ping-uptime/internal/pkg/jwt"
+	"ping-uptime/internal/pkg/utils"
+	"ping-uptime/modules/users/domain/entity"
+	"ping-uptime/modules/users/domain/repository"
 )
 
 // Errors

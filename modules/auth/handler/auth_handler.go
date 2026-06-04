@@ -2,17 +2,17 @@ package handler
 
 import (
 	"fmt"
-	"go-modular/internal/pkg/bus"
-	"go-modular/internal/pkg/jwt"
-	"go-modular/internal/pkg/logger"
-	"go-modular/internal/pkg/utils"
-	"go-modular/modules/auth/domain/service"
-	"go-modular/modules/users/domain/entity"
-	"go-modular/modules/users/dto/request"
-	"go-modular/modules/users/dto/response"
+	"ping-uptime/internal/pkg/bus"
+	"ping-uptime/internal/pkg/jwt"
+	"ping-uptime/internal/pkg/logger"
+	"ping-uptime/internal/pkg/utils"
+	"ping-uptime/modules/auth/domain/service"
+	"ping-uptime/modules/users/domain/entity"
+	"ping-uptime/modules/users/dto/request"
+	"ping-uptime/modules/users/dto/response"
 	"net/http"
 
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
 // AuthHandler struct handles HTTP request for auth.

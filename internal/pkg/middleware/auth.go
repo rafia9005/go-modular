@@ -2,11 +2,11 @@ package middleware
 
 import (
 	"fmt"
-	"go-modular/internal/pkg/jwt"
+	"ping-uptime/internal/pkg/jwt"
 	"net/http"
 	"strings"
 
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
 var jwtService jwt.JWT

@@ -3,7 +3,7 @@ package utils
 import (
 	"net/http"
 
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
 // Response is a standard structure for JSON responses.

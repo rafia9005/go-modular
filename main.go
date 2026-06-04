@@ -1,30 +1,21 @@
 package main
 
 import (
-	"flag"
-	"go-modular/internal/app"
-	"go-modular/internal/pkg/config"
-	"go-modular/internal/pkg/logger"
-	"go-modular/internal/pkg/middleware"
-	"go-modular/modules/auth"
-	user "go-modular/modules/users"
+	"ping-uptime/internal/app"
+	"ping-uptime/internal/pkg/config"
+	"ping-uptime/internal/pkg/logger"
+	"ping-uptime/internal/pkg/middleware"
+	"ping-uptime/modules/auth"
+	user "ping-uptime/modules/users"
 	"log"
 	"os"
 )
 
-var configFile *string
-
-func init() {
-	configFile = flag.String("c", "config.toml", "configuration file")
-	flag.Parse()
-}
-
 func main() {
 
-	// Load configuration
-	cfg := config.NewConfig(*configFile)
-	if err := cfg.Initialize(); err != nil {
-		log.Fatalf("Error reading config : %v", err)
+	// Load configuration from .env
+	if err := config.Initialize(); err != nil {
+		log.Fatalf("Error loading config: %v", err)
 		os.Exit(1)
 	}
 
@@ -32,7 +23,7 @@ func main() {
 	logCfg := logger.DefaultConfig()
 
 	// Start the application
-	app, err := app.NewApp(&logCfg)
+	application, err := app.NewApp(&logCfg)
 	if err != nil {
 		log.Fatalf("Error creating application : %v", err)
 		os.Exit(1)
@@ -43,15 +34,15 @@ func main() {
 	middleware.InitializeAuth(jwtSignatureKey)
 
 	// register modules
-	app.RegisterModule(user.NewModule())
-	app.RegisterModule(auth.NewModule())
+	application.RegisterModule(user.NewModule())
+	application.RegisterModule(auth.NewModule())
 
 	// initialize the application
-	if err := app.Initialize(); err != nil {
+	if err := application.Initialize(); err != nil {
 		log.Fatalf("Error initializing application : %v", err)
 		os.Exit(1)
 	}
 
 	// Start the application
-	app.Start()
+	application.Start()
 }

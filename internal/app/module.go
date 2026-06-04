@@ -1,10 +1,10 @@
 package app
 
 import (
-	"go-modular/internal/pkg/bus"
-	"go-modular/internal/pkg/logger"
+	"ping-uptime/internal/pkg/bus"
+	"ping-uptime/internal/pkg/logger"
 
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 )
 

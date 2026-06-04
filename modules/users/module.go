@@ -1,14 +1,14 @@
 package user
 
 import (
-	"go-modular/internal/pkg/bus"
-	"go-modular/internal/pkg/logger"
-	"go-modular/modules/users/domain/entity"
-	"go-modular/modules/users/domain/repository"
-	"go-modular/modules/users/domain/service"
-	"go-modular/modules/users/handler"
+	"ping-uptime/internal/pkg/bus"
+	"ping-uptime/internal/pkg/logger"
+	"ping-uptime/modules/users/domain/entity"
+	"ping-uptime/modules/users/domain/repository"
+	"ping-uptime/modules/users/domain/service"
+	"ping-uptime/modules/users/handler"
 
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 	"gorm.io/gorm"
 )
 

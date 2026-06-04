@@ -3,8 +3,8 @@ package service
 import (
 	"context"
 	"errors"
-	"go-modular/modules/users/domain/entity"
-	"go-modular/modules/users/domain/repository"
+	"ping-uptime/modules/users/domain/entity"
+	"ping-uptime/modules/users/domain/repository"
 )
 
 // Errors
